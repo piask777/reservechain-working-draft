@@ -10,9 +10,14 @@ export const navigationLinks = [
   ['/registry', 'Registry'],
   ['/admin', 'Admin'],
   ['/architecture', 'Architecture'],
+  ['/mobile', 'Mobile'],
+  ['/contract-design', 'Contract design'],
+  ['/whitepaper', 'Whitepaper'],
   ['/delivery', 'Delivery'],
   ['/waitlist', 'Waitlist'],
-]
+] as const
+
+const primaryPaths = new Set(['/', '/copper', '/nickel', '/passport', '/registry', '/waitlist'])
 
 export function Layout() {
   const [open, setOpen] = useState(false)
@@ -30,9 +35,17 @@ export function Layout() {
           <span aria-hidden="true">{open ? 'Close' : 'Menu'}</span>
         </button>
         <nav id="main-nav" className={open ? 'nav open' : 'nav'} aria-label="Primary navigation">
-          {navigationLinks.map(([to, label]) => (
+          {navigationLinks.filter(([to]) => primaryPaths.has(to)).map(([to, label]) => (
             <NavLink key={to} to={to} end={to === '/'} onClick={() => setOpen(false)}>{label}</NavLink>
           ))}
+          <details className="nav-group">
+            <summary>Planning</summary>
+            <div>
+              {navigationLinks.filter(([to]) => !primaryPaths.has(to)).map(([to, label]) => (
+                <NavLink key={to} to={to} onClick={() => setOpen(false)}>{label}</NavLink>
+              ))}
+            </div>
+          </details>
           <span className="nav-status"><i />Prelaunch</span>
         </nav>
       </header>

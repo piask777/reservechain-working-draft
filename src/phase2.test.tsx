@@ -43,6 +43,9 @@ describe('navigation and routes', () => {
     ['/registry', 'Asset Registry'],
     ['/admin', 'Controlled publishing workspace.'],
     ['/architecture', 'Architecture Explorer'],
+    ['/mobile', 'Mobile Experience'],
+    ['/contract-design', 'Contract Design'],
+    ['/whitepaper', 'Whitepaper &amp; Localization'],
     ['/delivery', 'Delivery Plan'],
     ['/waitlist', 'Follow ReserveChain development.'],
   ])('renders %s as a dedicated route', (path, heading) => {
@@ -51,8 +54,20 @@ describe('navigation and routes', () => {
 
   it('links to every phase two route and preserves an actual not-found view', () => {
     const paths = navigationLinks.map(([path]) => path)
-    expect(paths).toEqual(expect.arrayContaining(['/registry', '/admin', '/architecture', '/delivery', '/waitlist']))
+    expect(paths).toEqual(expect.arrayContaining(['/registry', '/admin', '/architecture', '/mobile', '/contract-design', '/whitepaper', '/delivery', '/waitlist']))
     expect(renderRoute('/missing-record')).toContain('This record does not exist.')
+  })
+
+  it('exposes proposed implementation boundaries without presenting live functions', () => {
+    const admin = renderRoute('/admin')
+    const architecture = renderRoute('/architecture')
+    const contract = renderRoute('/contract-design')
+    expect(admin).toContain('PROPOSED WORDPRESS IMPLEMENTATION')
+    expect(admin).toContain('rc_asset_record')
+    expect(architecture).toContain('ROLE-PERMISSION MATRIX')
+    expect(architecture).toContain('TAMPER-EVIDENT AUDIT EXAMPLE')
+    expect(contract).toContain('Mainnet prohibited')
+    expect(contract).toContain('No contract is deployed, compiled or connected')
   })
 })
 
